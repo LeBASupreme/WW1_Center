@@ -1,14 +1,11 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import Menu from './Menu'
-import FooterHome from './FooterHome'
-
 function ShopSection() {
   const [products, setProducts] = useState([])
   const [filtered, setFiltered] = useState([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
-  const [footerOpen, setFooterOpen] = useState(false)
 
   useEffect(() => {
     fetch('http://localhost:5000/api/products')
@@ -90,15 +87,6 @@ function ShopSection() {
         )}
       </div>
 
-      <button
-        onClick={() => setFooterOpen(true)}
-        className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 flex flex-col items-center gap-2 text-xs tracking-[0.3em] uppercase text-gray-500 hover:text-black transition-colors duration-200"
-      >
-        <span className="block w-[1px] h-6 bg-gray-400"></span>
-        More Info
-      </button>
-
-      <FooterHome isOpen={footerOpen} setIsOpen={setFooterOpen} />
     </div>
   )
 }

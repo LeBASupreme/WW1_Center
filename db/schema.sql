@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS bookings (
 );
 
 CREATE TABLE IF NOT EXISTS special_events (
-  id          SERIAL PRIMARY KEY,
+  id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   title       TEXT NOT NULL,
   description TEXT,
   event_date  DATE NOT NULL,
@@ -55,7 +55,7 @@ CREATE TABLE IF NOT EXISTS special_events (
 
 -- Souvenir shop
 CREATE TABLE IF NOT EXISTS products (
-  id          SERIAL PRIMARY KEY,
+  id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   name        TEXT NOT NULL,
   description TEXT,
   price       NUMERIC(8,2) NOT NULL CHECK (price >= 0),
@@ -78,7 +78,7 @@ CREATE TABLE IF NOT EXISTS orders (
 CREATE TABLE IF NOT EXISTS order_items (
   id         SERIAL PRIMARY KEY,
   order_id   INT NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
-  product_id INT NOT NULL REFERENCES products(id),
+  product_id UUID NOT NULL REFERENCES products(id),
   quantity   INT NOT NULL CHECK (quantity >= 1),
   unit_price NUMERIC(8,2) NOT NULL
 );
@@ -95,7 +95,7 @@ CREATE TABLE IF NOT EXISTS volunteers (
 );
 
 CREATE TABLE IF NOT EXISTS battlefield_trips (
-  id           SERIAL PRIMARY KEY,
+  id           UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   title        TEXT NOT NULL,
   description  TEXT,
   trip_date    DATE NOT NULL,
@@ -104,12 +104,14 @@ CREATE TABLE IF NOT EXISTS battlefield_trips (
 );
 
 CREATE TABLE IF NOT EXISTS news(
-  id          SERIAL PRIMARY KEY,
+  id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   title       TEXT NOT NULL,
   content     TEXT NOT NULL,
+  image_url   TEXT,
+  is_published BOOLEAN NOT NULL DEFAULT FALSE,
   published_at TIMESTAMPTZ DEFAULT NOW(),
   created_at   TIMESTAMPTZ DEFAULT NOW()
-)
+);
 
 
 

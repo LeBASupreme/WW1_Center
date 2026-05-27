@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { Routes, Route } from 'react-router-dom'
-import './App.css'
 import Menu from './components/Menu'
 import FooterHome from './components/FooterHome'
 import AdminLogin from './components/Admin/LoginPage'
@@ -9,12 +8,14 @@ import Admin from './components/Admin/Admin'
 import AdminTrips from './components/Admin/AdminTrips'
 import AdminNews from './components/Admin/AdminNews'
 import AdminVolunteers from './components/Admin/AdminVolunteers'
+import AdminEvents from './components/Admin/AdminEvents'
 import ShopSection from './components/ShopSection'
 import ShopDetail from './components/ShopDetail'
 import NewsSection from './components/NewsSection'
 import NewsDetail from './components/NewsDetail'
 import BattlefieldSection from './components/BattlefieldSection'
 import BattlefieldDetail from './components/BattlefieldDetail'
+import MuseumScroll from './components/MuseumScroll'
 
 
 
@@ -25,11 +26,8 @@ function Home() {
   return (
     <>
       <Menu />
-      <main className="min-h-screen bg-gray-900 flex items-center justify-center">
-        <h1 className="text-white text-4xl font-light tracking-widest uppercase">
-          WW1 Centre
-        </h1>
-      </main>
+      <MuseumScroll />
+
 
       <button
         onClick={() => setFooterOpen(true)}
@@ -55,6 +53,7 @@ function App() {
       <Route path="/admin/trips" element={<AdminTrips />} />
       <Route path="/admin/volunteers" element={<AdminVolunteers />} />
       <Route path="/admin/news" element={<AdminNews />} />
+      <Route path="/admin/events" element={<AdminEvents />} />
       <Route path="/shop" element={<ShopSection />} />
       <Route path="/news" element={<NewsSection />} />
       <Route path="/news/:id" element={<NewsDetail />} />

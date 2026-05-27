@@ -1,5 +1,6 @@
 
 INSERT INTO users (name, email, password_hash, role) VALUES
+  ('Admin',   'admin@admin.com',        '$2b$10$RPU7AHvjVjLrnLubmVHhKec1Wi3vkop7hT.6JvZORpb1XkwimYpjG', 'SUPER_ADMIN'),
   ('Charles', 'charles@ww1centre.org', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'SUPER_ADMIN'),
   ('Sarah',   'sarah@ww1centre.org',   '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'VOLUNTEER');
 

@@ -1,13 +1,12 @@
 import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import Menu from './Menu'
-import FooterHome from './FooterHome'
+
 
 function BattlefieldDetail() {
   const { id } = useParams()
   const [trip, setTrip] = useState(null)
   const [loading, setLoading] = useState(true)
-  const [footerOpen, setFooterOpen] = useState(false)
   const [form, setForm] = useState({ name: '', email: '', phone: '' })
   const [submitted, setSubmitted] = useState(false)
   const [sending, setSending] = useState(false)
@@ -115,14 +114,6 @@ function BattlefieldDetail() {
         </div>
       </div>
 
-      <button
-        onClick={() => setFooterOpen(true)}
-        className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 flex flex-col items-center gap-2 text-xs tracking-[0.3em] uppercase text-gray-500 hover:text-black transition-colors duration-200"
-      >
-        <span className="block w-[1px] h-6 bg-gray-400"></span>
-        More Info
-      </button>
-      <FooterHome isOpen={footerOpen} setIsOpen={setFooterOpen} />
     </div>
   )
 }

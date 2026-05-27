@@ -1,13 +1,11 @@
 import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import Menu from './Menu'
-import FooterHome from './FooterHome'
 
 function NewsDetail() {
   const { id } = useParams()
   const [article, setArticle] = useState(null)
   const [loading, setLoading] = useState(true)
-  const [footerOpen, setFooterOpen] = useState(false)
 
   useEffect(() => {
     fetch('http://localhost:5000/api/news')
@@ -46,21 +44,18 @@ function NewsDetail() {
           Back to news
         </Link>
 
-        <article className="bg-white rounded-2xl p-8">
-          <p className="text-sm text-black/40 mb-3">{formatDate(article.created_at)}</p>
-          <h1 className="text-3xl font-bold text-black mb-6">{article.title}</h1>
-          <p className="text-black/60 leading-relaxed whitespace-pre-line">{article.content}</p>
+        <article className="bg-white rounded-2xl overflow-hidden">
+          {article.image_url && (
+            <img src={article.image_url} alt={article.title} className="w-full h-64 object-cover" />
+          )}
+          <div className="p-8">
+            <p className="text-sm text-black/40 mb-3">{formatDate(article.created_at)}</p>
+            <h1 className="text-3xl font-bold text-black mb-6">{article.title}</h1>
+            <p className="text-black/60 leading-relaxed whitespace-pre-line">{article.content}</p>
+          </div>
         </article>
       </div>
 
-      <button
-        onClick={() => setFooterOpen(true)}
-        className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 flex flex-col items-center gap-2 text-xs tracking-[0.3em] uppercase text-gray-500 hover:text-black transition-colors duration-200"
-      >
-        <span className="block w-[1px] h-6 bg-gray-400"></span>
-        More Info
-      </button>
-      <FooterHome isOpen={footerOpen} setIsOpen={setFooterOpen} />
     </div>
   )
 }

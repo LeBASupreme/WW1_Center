@@ -1,12 +1,10 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import Menu from './Menu'
-import FooterHome from './FooterHome'
 
 function NewsSection() {
   const [articles, setArticles] = useState([])
   const [loading, setLoading] = useState(true)
-  const [footerOpen, setFooterOpen] = useState(false)
 
   useEffect(() => {
     fetch('http://localhost:5000/api/news')
@@ -41,30 +39,31 @@ function NewsSection() {
               <Link
                 key={article.id}
                 to={`/news/${article.id}`}
-                className="bg-white rounded-2xl p-6 hover:shadow-lg transition-all duration-300 group"
+                className="bg-white rounded-2xl overflow-hidden hover:shadow-lg transition-all duration-300 group flex"
               >
-                <p className="text-xs text-black/40 mb-2">{formatDate(article.created_at)}</p>
-                <h2 className="text-xl font-bold text-black group-hover:text-black/70 transition mb-2">{article.title}</h2>
-                {article.content && (
-                  <p className="text-black/50 text-sm line-clamp-3 leading-relaxed">{article.content}</p>
+                {article.image_url && (
+                  <div className="w-48 shrink-0 overflow-hidden">
+                    <img src={article.image_url} alt={article.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                  </div>
                 )}
-                <span className="inline-block mt-4 text-sm font-medium text-black bg-black/5 px-4 py-2 rounded-full group-hover:bg-black group-hover:text-white transition">
-                  Read more
-                </span>
+                <div className="p-6 flex flex-col justify-between">
+                  <div>
+                    <p className="text-xs text-black/40 mb-2">{formatDate(article.created_at)}</p>
+                    <h2 className="text-xl font-bold text-black group-hover:text-black/70 transition mb-2">{article.title}</h2>
+                    {article.content && (
+                      <p className="text-black/50 text-sm line-clamp-3 leading-relaxed">{article.content}</p>
+                    )}
+                  </div>
+                  <span className="inline-block mt-4 text-sm font-medium text-black bg-black/5 px-4 py-2 rounded-full group-hover:bg-black group-hover:text-white transition w-fit">
+                    Read more
+                  </span>
+                </div>
               </Link>
             ))}
           </div>
         )}
       </div>
 
-      <button
-        onClick={() => setFooterOpen(true)}
-        className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 flex flex-col items-center gap-2 text-xs tracking-[0.3em] uppercase text-gray-500 hover:text-black transition-colors duration-200"
-      >
-        <span className="block w-[1px] h-6 bg-gray-400"></span>
-        More Info
-      </button>
-      <FooterHome isOpen={footerOpen} setIsOpen={setFooterOpen} />
     </div>
   )
 }

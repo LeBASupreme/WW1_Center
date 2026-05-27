@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react'
 import AdminLayout from './AdminLayout'
+import DragDropImage from './DragDropImage'
 
 function AdminNews() {
   const [news, setNews] = useState([])
   const [loading, setLoading] = useState(true)
   const [showModal, setShowModal] = useState(false)
   const [editing, setEditing] = useState(null)
-  const [form, setForm] = useState({ title: '', content: '' })
+  const [form, setForm] = useState({ title: '', content: '', image_url: '' })
   const [saving, setSaving] = useState(false)
 
   const fetchNews = () => {
@@ -20,13 +21,13 @@ function AdminNews() {
 
   const openCreate = () => {
     setEditing(null)
-    setForm({ title: '', content: '' })
+    setForm({ title: '', content: '', image_url: '' })
     setShowModal(true)
   }
 
   const openEdit = (item) => {
     setEditing(item)
-    setForm({ title: item.title, content: item.content })
+    setForm({ title: item.title, content: item.content, image_url: item.image_url || '' })
     setShowModal(true)
   }
 
@@ -150,6 +151,10 @@ function AdminNews() {
                 <textarea value={form.content} onChange={e => setForm({ ...form, content: e.target.value })} required rows={8}
                   className="w-full border border-black/10 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-black/30 transition resize-none"
                   placeholder="Write your article here..." />
+              </div>
+              <div>
+                <label className="text-sm text-black/50 mb-1 block">Image</label>
+                <DragDropImage value={form.image_url} onChange={(url) => setForm({ ...form, image_url: url })} />
               </div>
               <div className="flex gap-3 mt-2">
                 <button type="button" onClick={() => setShowModal(false)} className="flex-1 py-2.5 rounded-xl border border-black/10 text-sm font-medium hover:bg-black/5 transition">Cancel</button>
