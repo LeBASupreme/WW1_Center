@@ -1,3 +1,4 @@
+import API_URL from '../../config/api.js'
 import { useState, useEffect } from 'react'
 import AdminLayout from './AdminLayout'
 
@@ -10,7 +11,7 @@ function AdminEvents() {
   const [saving, setSaving] = useState(false)
 
   const fetchEvents = () => {
-    fetch('http://localhost:5000/api/special-events', { credentials: 'include' })
+    fetch(API_URL + '/api/special-events', { credentials: 'include' })
       .then(r => r.json())
       .then(data => { setEvents(data); setLoading(false) })
       .catch(() => setLoading(false))
@@ -39,8 +40,8 @@ function AdminEvents() {
     e.preventDefault()
     setSaving(true)
     const url = editing
-      ? `http://localhost:5000/api/special-events/${editing.id}`
-      : 'http://localhost:5000/api/special-events'
+      ? `${API_URL}/api/special-events/${editing.id}`
+      : API_URL + '/api/special-events'
     await fetch(url, {
       method: editing ? 'PUT' : 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -54,7 +55,7 @@ function AdminEvents() {
 
   const handleDelete = async (id) => {
     if (!confirm('Delete this event?')) return
-    await fetch(`http://localhost:5000/api/special-events/${id}`, { method: 'DELETE', credentials: 'include' })
+    await fetch(`${API_URL}/api/special-events/${id}`, { method: 'DELETE', credentials: 'include' })
     fetchEvents()
   }
 

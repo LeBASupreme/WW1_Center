@@ -1,14 +1,19 @@
+import API_URL from '../../config/api.js'
 import { useState, useEffect } from 'react'
 import AdminLayout from './AdminLayout'
+
+const STATUS_STYLE = {
+  PENDING:  'bg-yellow-100 text-yellow-700',
+  APPROVED: 'bg-green-100 text-green-700',
+  REJECTED: 'bg-red-100 text-red-500',
+}
 
 function AdminVolunteers() {
   const [volunteers, setVolunteers] = useState([])
   const [loading, setLoading] = useState(true)
-  const [showModal, setShowModal] = useState(false)
-  const [selected, setSelected] = useState(null)
 
   const fetchVolunteers = () => {
-    fetch('http://localhost:5000/api/volunteers', { credentials: 'include' })
+    fetch(API_URL + '/api/volunteers', { credentials: 'include' })
       .then(r => r.json())
       .then(data => { setVolunteers(data); setLoading(false) })
       .catch(() => setLoading(false))
@@ -16,9 +21,19 @@ function AdminVolunteers() {
 
   useEffect(() => { fetchVolunteers() }, [])
 
+  const updateStatus = async (id, status) => {
+    await fetch(`${API_URL}/api/volunteers/${id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ status })
+    })
+    fetchVolunteers()
+  }
+
   const handleDelete = async (id) => {
     if (!confirm('Remove this volunteer?')) return
-    await fetch(`http://localhost:5000/api/volunteers/${id}`, { method: 'DELETE', credentials: 'include' })
+    await fetch(`${API_URL}/api/volunteers/${id}`, { method: 'DELETE', credentials: 'include' })
     fetchVolunteers()
   }
 
@@ -48,6 +63,7 @@ function AdminVolunteers() {
                 <th className="text-left text-xs font-medium text-black/40 uppercase px-6 py-4">Email</th>
                 <th className="text-left text-xs font-medium text-black/40 uppercase px-6 py-4">Phone</th>
                 <th className="text-left text-xs font-medium text-black/40 uppercase px-6 py-4">Availability</th>
+                <th className="text-left text-xs font-medium text-black/40 uppercase px-6 py-4">Status</th>
                 <th className="text-left text-xs font-medium text-black/40 uppercase px-6 py-4">Applied</th>
                 <th className="text-right text-xs font-medium text-black/40 uppercase px-6 py-4">Actions</th>
               </tr>
@@ -61,13 +77,46 @@ function AdminVolunteers() {
                   </td>
                   <td className="px-6 py-4 text-sm text-black/60">{v.phone || '—'}</td>
                   <td className="px-6 py-4 text-sm text-black/60 max-w-xs truncate">{v.availability || '—'}</td>
+                  <td className="px-6 py-4">
+                    <span className={`text-xs font-medium px-3 py-1 rounded-full ${STATUS_STYLE[v.status] || 'bg-gray-100 text-gray-500'}`}>
+                      {v.status}
+                    </span>
+                  </td>
                   <td className="px-6 py-4 text-sm text-black/40">{formatDate(v.created_at)}</td>
-                  <td className="px-6 py-4 text-right">
-                    <button onClick={() => handleDelete(v.id)} className="p-2 hover:bg-red-50 rounded-lg transition">
-                      <svg className="w-4 h-4 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                      </svg>
-                    </button>
+                  <td className="px-6 py-4">
+                    <div className="flex items-center justify-end gap-1">
+                      {v.status !== 'APPROVED' && (
+                        <button
+                          onClick={() => updateStatus(v.id, 'APPROVED')}
+                          className="p-2 hover:bg-green-50 rounded-lg transition"
+                          title="Approve"
+                        >
+                          <svg className="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M5 13l4 4L19 7" />
+                          </svg>
+                        </button>
+                      )}
+                      {v.status !== 'REJECTED' && (
+                        <button
+                          onClick={() => updateStatus(v.id, 'REJECTED')}
+                          className="p-2 hover:bg-red-50 rounded-lg transition"
+                          title="Reject"
+                        >
+                          <svg className="w-4 h-4 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M6 18L18 6M6 6l12 12" />
+                          </svg>
+                        </button>
+                      )}
+                      <button
+                        onClick={() => handleDelete(v.id)}
+                        className="p-2 hover:bg-red-50 rounded-lg transition"
+                        title="Delete"
+                      >
+                        <svg className="w-4 h-4 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}

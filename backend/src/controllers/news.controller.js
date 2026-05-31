@@ -20,12 +20,12 @@ export async function createNews(req, res) {
 
 export async function updateNews(req, res) {
     const { id } = req.params;
-    const { title, content, image_url } = req.body;
+    const { title, content, image_url, is_published } = req.body;
     const { rows } = await pool.query(
         `UPDATE news
-            SET title=$1, content=$2, image_url=$3
-            WHERE id=$4 RETURNING *`,
-        [title, content, image_url || null, id]
+            SET title=$1, content=$2, image_url=$3, is_published=$4
+            WHERE id=$5 RETURNING *`,
+        [title, content, image_url || null, is_published ?? false, id]
     );
     if (!rows[0]) return res.status(404).json({ error: 'News introuvable' });
     res.json(rows[0]);

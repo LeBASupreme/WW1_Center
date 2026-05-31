@@ -9,6 +9,7 @@ import AdminTrips from './components/Admin/AdminTrips'
 import AdminNews from './components/Admin/AdminNews'
 import AdminVolunteers from './components/Admin/AdminVolunteers'
 import AdminEvents from './components/Admin/AdminEvents'
+import AdminSettings from './components/Admin/AdminSettings'
 import ShopSection from './components/ShopSection'
 import ShopDetail from './components/ShopDetail'
 import NewsSection from './components/NewsSection'
@@ -16,6 +17,12 @@ import NewsDetail from './components/NewsDetail'
 import BattlefieldSection from './components/BattlefieldSection'
 import BattlefieldDetail from './components/BattlefieldDetail'
 import MuseumScroll from './components/MuseumScroll'
+import Donate from './components/Donate'
+import DonateSuccess from './components/DonateSuccess'
+import ShopSuccess from './components/ShopSuccess'
+import Volunteer from './components/Volunteer'
+import About from './components/About'
+import Contact from './components/Contact'
 
 
 
@@ -54,12 +61,19 @@ function App() {
       <Route path="/admin/volunteers" element={<AdminVolunteers />} />
       <Route path="/admin/news" element={<AdminNews />} />
       <Route path="/admin/events" element={<AdminEvents />} />
+      <Route path="/admin/settings" element={<AdminSettings />} />
       <Route path="/shop" element={<ShopSection />} />
       <Route path="/news" element={<NewsSection />} />
       <Route path="/news/:id" element={<NewsDetail />} />
       <Route path="/battlefield-trips" element={<BattlefieldSection />} />
       <Route path="/battlefield-trips/:id" element={<BattlefieldDetail />} />
+      <Route path="/shop/success" element={<ShopSuccess />} />
       <Route path="/shop/:id" element={<ShopDetail />} />
+      <Route path="/donate" element={<Donate />} />
+      <Route path="/donate/success" element={<DonateSuccess />} />
+      <Route path="/volunteer" element={<Volunteer />} />
+      <Route path="/about" element={<About />} />
+      <Route path="/contact" element={<Contact />} />
     </Routes>
   )
 }

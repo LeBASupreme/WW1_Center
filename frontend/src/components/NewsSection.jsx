@@ -1,3 +1,4 @@
+import API_URL from '../config/api.js'
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import Menu from './Menu'
@@ -7,7 +8,7 @@ function NewsSection() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/news')
+    fetch(API_URL + '/api/news')
       .then(r => r.json())
       .then(data => { setArticles(data); setLoading(false) })
       .catch(() => setLoading(false))

@@ -5,7 +5,14 @@ import ytIcon from '../img/YouTube Logo.png'
 import liIcon from '../img/LinkedIn.png'
 import igIcon from '../img/Instagram.png'
 
-const infoLinks = ['Artefacts Wanted', 'Help & Volunteer', 'Donations', 'Gift Shop', 'Privacy Policy', 'Legal Notice']
+const infoLinks = [
+  { label: 'Help & Volunteer', href: '/volunteer' },
+  { label: 'Donations',        href: '/donate' },
+  { label: 'Gift Shop',        href: '/shop' },
+  { label: 'Artefacts Wanted', href: '#' },
+  { label: 'Privacy Policy',   href: '#' },
+  { label: 'Legal Notice',     href: '#' },
+]
 
 function FooterHome({ isOpen, setIsOpen }) {
   const overlayRef = useRef(null)
@@ -68,8 +75,8 @@ function FooterHome({ isOpen, setIsOpen }) {
           <p className="font-semibold mb-2">Information</p>
           <div className="flex flex-col gap-0.5">
             {infoLinks.map(link => (
-              <a key={link} href="#" className="text-black underline underline-offset-2 decoration-black hover:opacity-50 transition-opacity leading-6">
-                {link}
+              <a key={link.label} href={link.href} className="text-black underline underline-offset-2 decoration-black hover:opacity-50 transition-opacity leading-6">
+                {link.label}
               </a>
             ))}
           </div>

@@ -1,3 +1,4 @@
+import API_URL from '../config/api.js'
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import Menu from './Menu'
@@ -8,7 +9,7 @@ function ShopSection() {
   const [search, setSearch] = useState('')
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/products')
+    fetch(API_URL + '/api/products')
       .then(res => res.json())
       .then(data => {
         setProducts(data)

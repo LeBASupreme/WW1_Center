@@ -1,3 +1,4 @@
+import API_URL from '../config/api.js'
 import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import Menu from './Menu'
@@ -8,10 +9,10 @@ function NewsDetail() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/news')
+    fetch(API_URL + '/api/news')
       .then(r => r.json())
       .then(data => {
-        setArticle(data.find(a => a.id === parseInt(id)) || null)
+        setArticle(data.find(a => a.id === id) || null)
         setLoading(false)
       })
       .catch(() => setLoading(false))

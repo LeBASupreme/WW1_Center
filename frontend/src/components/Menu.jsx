@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react'
 import gsap from 'gsap'
 
-const NAV_LINKS = ['Home', 'Exhibitions', 'Shop', 'Bookings', 'News', 'About', 'Contact']
+const NAV_LINKS = ['Home', 'Shop', 'News', 'About' , 'Donate', 'Contact']
 
 function Menu({ dark = false }) {
   const [isOpen, setIsOpen] = useState(false)

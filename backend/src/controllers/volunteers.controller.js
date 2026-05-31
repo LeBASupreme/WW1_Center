@@ -28,6 +28,20 @@ export async function updateVolunteer(req, res) {
     res.json(rows[0]);
 }
 
+export async function updateVolunteerStatus(req, res) {
+    const { id } = req.params;
+    const { status } = req.body;
+    if (!['PENDING', 'APPROVED', 'REJECTED'].includes(status)) {
+        return res.status(400).json({ error: 'Invalid status' });
+    }
+    const { rows } = await pool.query(
+        `UPDATE volunteers SET status=$1 WHERE id=$2 RETURNING *`,
+        [status, id]
+    );
+    if (!rows[0]) return res.status(404).json({ error: 'Volunteer introuvable' });
+    res.json(rows[0]);
+}
+
 export async function deleteVolunteer(req, res) {
     const { id } = req.params;
     await pool.query('DELETE FROM volunteers WHERE id = $1', [id]);

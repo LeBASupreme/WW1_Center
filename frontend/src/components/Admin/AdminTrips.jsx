@@ -1,3 +1,4 @@
+import API_URL from '../../config/api.js'
 import { useState, useEffect } from 'react'
 import AdminLayout from './AdminLayout'
 
@@ -10,7 +11,7 @@ function AdminTrips() {
   const [saving, setSaving] = useState(false)
 
   const fetchTrips = () => {
-    fetch('http://localhost:5000/api/battlefields', { credentials: 'include' })
+    fetch(API_URL + '/api/battlefields', { credentials: 'include' })
       .then(r => r.json())
       .then(data => { setTrips(data); setLoading(false) })
       .catch(() => setLoading(false))
@@ -34,8 +35,8 @@ function AdminTrips() {
     e.preventDefault()
     setSaving(true)
     const url = editing
-      ? `http://localhost:5000/api/battlefields/${editing.id}`
-      : 'http://localhost:5000/api/battlefields'
+      ? `${API_URL}/api/battlefields/${editing.id}`
+      : API_URL + '/api/battlefields'
     await fetch(url, {
       method: editing ? 'PUT' : 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -49,7 +50,7 @@ function AdminTrips() {
 
   const handleDelete = async (id) => {
     if (!confirm('Delete this trip?')) return
-    await fetch(`http://localhost:5000/api/battlefields/${id}`, { method: 'DELETE', credentials: 'include' })
+    await fetch(`${API_URL}/api/battlefields/${id}`, { method: 'DELETE', credentials: 'include' })
     fetchTrips()
   }
 

@@ -1,4 +1,6 @@
-import { Link, useLocation } from 'react-router-dom'
+import API_URL from '../../config/api.js'
+import { useEffect, useState } from 'react'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 
 const NAV = [
   { label: 'Dashboard',        path: '/admin/dashboard' },
@@ -7,13 +9,25 @@ const NAV = [
   { label: 'Battlefield Trips',path: '/admin/trips' },
   { label: 'News',             path: '/admin/news' },
   { label: 'Volunteers',       path: '/admin/volunteers' },
+  { label: 'Settings',         path: '/admin/settings' },
 ]
 
 function AdminLayout({ children }) {
   const { pathname } = useLocation()
+  const navigate = useNavigate()
+  const [checking, setChecking] = useState(true)
+
+  useEffect(() => {
+    fetch(API_URL + '/api/auth/me', { credentials: 'include' })
+      .then(r => { if (!r.ok) throw new Error() })
+      .catch(() => navigate('/admin/login', { replace: true }))
+      .finally(() => setChecking(false))
+  }, [])
+
+  if (checking) return null
 
   const handleLogout = async () => {
-    await fetch('http://localhost:5000/api/auth/logout', {
+    await fetch(API_URL + '/api/auth/logout', {
       method: 'POST',
       credentials: 'include'
     })

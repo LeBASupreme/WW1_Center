@@ -4,7 +4,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 gsap.registerPlugin(ScrollTrigger)
 
-const FRAME_COUNT = 32
+const FRAME_COUNT = 39
 const FRAMES_PATH = '/frames'
 
 const getFramePath = (index) =>

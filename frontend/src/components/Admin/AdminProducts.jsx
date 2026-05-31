@@ -1,3 +1,4 @@
+import API_URL from '../../config/api.js'
 import { useState, useEffect } from 'react'
 import AdminLayout from './AdminLayout'
 
@@ -10,7 +11,7 @@ function AdminProducts() {
   const [saving, setSaving] = useState(false)
 
   const fetchProducts = () => {
-    fetch('http://localhost:5000/api/products', { credentials: 'include' })
+    fetch(API_URL + '/api/products', { credentials: 'include' })
       .then(r => r.json())
       .then(data => { setProducts(data); setLoading(false) })
       .catch(() => setLoading(false))
@@ -34,8 +35,8 @@ function AdminProducts() {
     e.preventDefault()
     setSaving(true)
     const url = editing
-      ? `http://localhost:5000/api/products/${editing.id}`
-      : 'http://localhost:5000/api/products'
+      ? `${API_URL}/api/products/${editing.id}`
+      : API_URL + '/api/products'
     await fetch(url, {
       method: editing ? 'PUT' : 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -49,7 +50,7 @@ function AdminProducts() {
 
   const handleDelete = async (id) => {
     if (!confirm('Delete this product?')) return
-    await fetch(`http://localhost:5000/api/products/${id}`, { method: 'DELETE', credentials: 'include' })
+    await fetch(`${API_URL}/api/products/${id}`, { method: 'DELETE', credentials: 'include' })
     fetchProducts()
   }
 

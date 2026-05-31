@@ -1,57 +1,47 @@
-import { useState, useEffect } from 'react'
-import AdminLayout from '../components/AdminLayout'
-import ImageUpload from '../components/ImageUpload'
+import API_URL from '../../config/api.js'
+import { useState } from 'react'
+import AdminLayout from './AdminLayout'
 
 function AdminSettings() {
-  const [form, setForm] = useState({ name: '', logo_url: '' })
-  const [loading, setLoading] = useState(true)
+  const [form, setForm] = useState({ currentPassword: '', newPassword: '', confirmPassword: '' })
   const [saving, setSaving] = useState(false)
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState('')
 
-  const token = localStorage.getItem('token')
-
-  useEffect(() => {
-    fetch('http://localhost:5000/api/organization', {
-      headers: { 'Authorization': `Bearer ${token}` }
-    })
-      .then(res => res.json())
-      .then(data => {
-        if (data.data) {
-          setForm({ name: data.data.name || '', logo_url: data.data.logo_url || '' })
-        }
-        setLoading(false)
-      })
-      .catch(() => setLoading(false))
-  }, [])
-
   const handleSubmit = async (e) => {
     e.preventDefault()
-    setSaving(true)
     setError('')
     setSuccess(false)
 
+    if (form.newPassword !== form.confirmPassword) {
+      setError('New passwords do not match.')
+      return
+    }
+    if (form.newPassword.length < 6) {
+      setError('New password must be at least 6 characters.')
+      return
+    }
+
+    setSaving(true)
     try {
-      const res = await fetch('http://localhost:5000/api/organization', {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify(form)
+      const res = await fetch(API_URL + '/api/auth/password', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({
+          currentPassword: form.currentPassword,
+          newPassword: form.newPassword,
+        })
       })
-
       const data = await res.json()
-
       if (!res.ok) {
-        setError(data.message || 'Erreur lors de la mise à jour')
-        setSaving(false)
-        return
+        setError(data.message || 'Something went wrong.')
+      } else {
+        setSuccess(true)
+        setForm({ currentPassword: '', newPassword: '', confirmPassword: '' })
       }
-
-      setSuccess(true)
     } catch {
-      setError('Erreur de connexion au serveur')
+      setError('Connection error.')
     }
     setSaving(false)
   }
@@ -60,57 +50,60 @@ function AdminSettings() {
     <AdminLayout>
       <h1 className="text-3xl font-bold text-black mb-8">Settings</h1>
 
-      {loading ? (
-        <div className="flex justify-center py-20">
-          <div className="w-8 h-8 border-2 border-black/20 border-t-black rounded-full animate-spin"></div>
-        </div>
-      ) : (
-        <div className="bg-white rounded-2xl p-6 max-w-2xl">
-          <h2 className="text-lg font-bold text-black mb-6">Organisation</h2>
+      <div className="bg-white rounded-2xl p-6 max-w-md">
+        <h2 className="text-lg font-bold text-black mb-6">Change Password</h2>
 
-          {success && (
-            <div className="bg-green-50 text-green-700 text-sm px-4 py-3 rounded-xl mb-6">
-              Organisation mise à jour avec succès !
-            </div>
-          )}
+        {success && (
+          <div className="bg-green-50 text-green-700 text-sm px-4 py-3 rounded-xl mb-6">
+            Password updated successfully.
+          </div>
+        )}
+        {error && (
+          <div className="bg-red-50 text-red-500 text-sm px-4 py-3 rounded-xl mb-6">
+            {error}
+          </div>
+        )}
 
-          {error && (
-            <div className="bg-red-50 text-red-500 text-sm px-4 py-3 rounded-xl mb-6">
-              {error}
-            </div>
-          )}
-
-          <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-            <div>
-              <label className="text-sm text-black/50 mb-1 block">Nom de l'organisation</label>
-              <input
-                type="text"
-                value={form.name}
-                onChange={(e) => setForm({ ...form, name: e.target.value })}
-                required
-                className="w-full border border-black/10 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-black/30 transition"
-                placeholder="Ma Société Events"
-              />
-            </div>
-
-            <div>
-              <label className="text-sm text-black/50 mb-2 block">Logo</label>
-              <ImageUpload
-                value={form.logo_url}
-                onChange={(url) => setForm({ ...form, logo_url: url })}
-              />
-            </div>
-
-            <button
-              type="submit"
-              disabled={saving}
-              className="bg-black text-white py-2.5 rounded-xl text-sm font-medium hover:bg-gray-800 transition disabled:opacity-50 mt-2"
-            >
-              {saving ? 'Enregistrement...' : 'Enregistrer'}
-            </button>
-          </form>
-        </div>
-      )}
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          <div>
+            <label className="text-sm text-black/50 mb-1 block">Current password</label>
+            <input
+              type="password"
+              required
+              value={form.currentPassword}
+              onChange={e => setForm({ ...form, currentPassword: e.target.value })}
+              className="w-full border border-black/10 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-black/30 transition"
+            />
+          </div>
+          <div>
+            <label className="text-sm text-black/50 mb-1 block">New password</label>
+            <input
+              type="password"
+              required
+              value={form.newPassword}
+              onChange={e => setForm({ ...form, newPassword: e.target.value })}
+              className="w-full border border-black/10 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-black/30 transition"
+            />
+          </div>
+          <div>
+            <label className="text-sm text-black/50 mb-1 block">Confirm new password</label>
+            <input
+              type="password"
+              required
+              value={form.confirmPassword}
+              onChange={e => setForm({ ...form, confirmPassword: e.target.value })}
+              className="w-full border border-black/10 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-black/30 transition"
+            />
+          </div>
+          <button
+            type="submit"
+            disabled={saving}
+            className="w-full bg-black text-white py-2.5 rounded-xl text-sm font-medium hover:bg-gray-800 transition disabled:opacity-50 mt-2"
+          >
+            {saving ? 'Saving...' : 'Update password'}
+          </button>
+        </form>
+      </div>
     </AdminLayout>
   )
 }

@@ -66,13 +66,16 @@ CREATE TABLE IF NOT EXISTS products (
 );
 
 CREATE TABLE IF NOT EXISTS orders (
-  id             SERIAL PRIMARY KEY,
-  customer_name  TEXT NOT NULL,
-  customer_email TEXT NOT NULL,
-  total          NUMERIC(8,2) NOT NULL,
-  status         TEXT NOT NULL DEFAULT 'PENDING'
-                   CHECK (status IN ('PENDING', 'PAID', 'CANCELLED')),
-  created_at     TIMESTAMPTZ DEFAULT NOW()
+  id                 SERIAL PRIMARY KEY,
+  customer_name      TEXT NOT NULL,
+  customer_email     TEXT NOT NULL,
+  customer_address   TEXT,
+  product_name       TEXT,
+  total              NUMERIC(8,2) NOT NULL,
+  stripe_session_id  TEXT UNIQUE,
+  status             TEXT NOT NULL DEFAULT 'PENDING'
+                       CHECK (status IN ('PENDING', 'PAID', 'CANCELLED')),
+  created_at         TIMESTAMPTZ DEFAULT NOW()
 );
 
 CREATE TABLE IF NOT EXISTS order_items (
@@ -86,12 +89,13 @@ CREATE TABLE IF NOT EXISTS order_items (
 
 
 CREATE TABLE IF NOT EXISTS volunteers (
-  id          SERIAL PRIMARY KEY,
-  name        TEXT NOT NULL,
-  email       TEXT UNIQUE NOT NULL,
-  phone       TEXT,
+  id           SERIAL PRIMARY KEY,
+  name         TEXT NOT NULL,
+  email        TEXT UNIQUE NOT NULL,
+  phone        TEXT,
   availability TEXT,
-  created_at  TIMESTAMPTZ DEFAULT NOW()
+  status       TEXT NOT NULL DEFAULT 'PENDING' CHECK (status IN ('PENDING', 'APPROVED', 'REJECTED')),
+  created_at   TIMESTAMPTZ DEFAULT NOW()
 );
 
 CREATE TABLE IF NOT EXISTS battlefield_trips (

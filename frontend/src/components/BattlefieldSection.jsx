@@ -1,3 +1,4 @@
+import API_URL from '../config/api.js'
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import Menu from './Menu'
@@ -6,7 +7,7 @@ function BattlefieldSection() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/battlefields')
+    fetch(API_URL + '/api/battlefields')
       .then(r => r.json())
       .then(data => { setTrips(data); setLoading(false) })
       .catch(() => setLoading(false))

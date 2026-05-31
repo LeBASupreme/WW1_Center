@@ -24,7 +24,7 @@ export const login = async (req, res) => {
         }
 
         const token = jwt.sign({ id: user.id, email: user.email, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
-        res.cookie('token', token, { httpOnly: true, sameSite: 'lax' });
+        res.cookie('token', token, { httpOnly: true, sameSite: 'lax', secure: process.env.NODE_ENV === 'production' });
         res.json({ message: "Login successful", user: { id: user.id, name: user.name, email: user.email, role: user.role }, token });
     } catch (error) {
         console.error("Login error:", error);
@@ -33,9 +33,31 @@ export const login = async (req, res) => {
 }  
 
 
+export const me = (req, res) => {
+  res.json({ user: req.user });
+}
+
 export const logout = (req, res) => {
     res.clearCookie('token');
     res.json({ message: "Logout successful" });
+}
+
+export const changePassword = async (req, res) => {
+    const { currentPassword, newPassword } = req.body;
+    if (!currentPassword || !newPassword) {
+        return res.status(400).json({ message: 'Both fields are required' });
+    }
+    try {
+        const result = await pool.query('SELECT * FROM users WHERE id = $1', [req.user.id]);
+        const user = result.rows[0];
+        const isMatch = await bcrypt.compare(currentPassword, user.password_hash);
+        if (!isMatch) return res.status(401).json({ message: 'Current password is incorrect' });
+        const password_hash = await bcrypt.hash(newPassword, 10);
+        await pool.query('UPDATE users SET password_hash = $1 WHERE id = $2', [password_hash, user.id]);
+        res.json({ message: 'Password updated successfully' });
+    } catch (error) {
+        res.status(500).json({ message: 'Internal server error' });
+    }
 }
 
 export const register = async (req, res) => {

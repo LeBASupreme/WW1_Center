@@ -1,3 +1,4 @@
+import API_URL from '../../config/api.js'
 import { useState, useEffect } from 'react'
 import AdminLayout from './AdminLayout'
 import DragDropImage from './DragDropImage'
@@ -11,7 +12,7 @@ function AdminNews() {
   const [saving, setSaving] = useState(false)
 
   const fetchNews = () => {
-    fetch('http://localhost:5000/api/news', { credentials: 'include' })
+    fetch(API_URL + '/api/news', { credentials: 'include' })
       .then(r => r.json())
       .then(data => { setNews(data); setLoading(false) })
       .catch(() => setLoading(false))
@@ -35,8 +36,8 @@ function AdminNews() {
     e.preventDefault()
     setSaving(true)
     const url = editing
-      ? `http://localhost:5000/api/news/${editing.id}`
-      : 'http://localhost:5000/api/news'
+      ? `${API_URL}/api/news/${editing.id}`
+      : API_URL + '/api/news'
     await fetch(url, {
       method: editing ? 'PUT' : 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -50,12 +51,12 @@ function AdminNews() {
 
   const handleDelete = async (id) => {
     if (!confirm('Delete this article?')) return
-    await fetch(`http://localhost:5000/api/news/${id}`, { method: 'DELETE', credentials: 'include' })
+    await fetch(`${API_URL}/api/news/${id}`, { method: 'DELETE', credentials: 'include' })
     fetchNews()
   }
 
   const togglePublish = async (item) => {
-    await fetch(`http://localhost:5000/api/news/${item.id}`, {
+    await fetch(`${API_URL}/api/news/${item.id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',

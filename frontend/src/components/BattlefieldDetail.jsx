@@ -1,3 +1,4 @@
+import API_URL from '../config/api.js'
 import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import Menu from './Menu'
@@ -12,10 +13,10 @@ function BattlefieldDetail() {
   const [sending, setSending] = useState(false)
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/battlefields')
+    fetch(API_URL + '/api/battlefields')
       .then(r => r.json())
       .then(data => {
-        setTrip(data.find(t => t.id === parseInt(id)) || null)
+        setTrip(data.find(t => t.id === id) || null)
         setLoading(false)
       })
       .catch(() => setLoading(false))
@@ -24,7 +25,7 @@ function BattlefieldDetail() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     setSending(true)
-    await fetch('http://localhost:5000/api/volunteers', {
+    await fetch(API_URL + '/api/volunteers', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ ...form, availability: `Battlefield trip: ${trip.title} (${trip.trip_date})` })
