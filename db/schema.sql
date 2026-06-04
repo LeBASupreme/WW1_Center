@@ -49,6 +49,7 @@ CREATE TABLE IF NOT EXISTS special_events (
   description TEXT,
   event_date  DATE NOT NULL,
   location    TEXT,
+  image_url   TEXT,
   is_active   BOOLEAN NOT NULL DEFAULT TRUE,
   created_at  TIMESTAMPTZ DEFAULT NOW()
 );

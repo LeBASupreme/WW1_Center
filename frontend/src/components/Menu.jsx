@@ -1,7 +1,16 @@
 import React, { useRef, useState, useEffect } from 'react'
 import gsap from 'gsap'
 
-const NAV_LINKS = ['Home', 'Shop', 'News', 'About' , 'Donate', 'Contact']
+const NAV_LINKS = [
+  { label: 'Home',              href: '/' },
+  { label: 'Shop',              href: '/shop' },
+  { label: 'News',              href: '/news' },
+  { label: 'Events',            href: '/events' },
+  { label: 'Battlefield Trips', href: '/battlefield-trips' },
+  { label: 'About',             href: '/about' },
+  { label: 'Donate',            href: '/donate' },
+  { label: 'Contact',           href: '/contact' },
+]
 
 function Menu({ dark = false }) {
   const [isOpen, setIsOpen] = useState(false)
@@ -36,7 +45,7 @@ function Menu({ dark = false }) {
     <>
       <button
         onClick={() => setIsOpen(prev => !prev)}
-        className="fixed top-6 right-6 z-[100] flex flex-col justify-center gap-[6px] p-2"
+        className="fixed top-6 right-6 z-[200] flex flex-col justify-center gap-[6px] p-2"
         aria-label={isOpen ? 'Close menu' : 'Open menu'}
       >
         <span
@@ -55,18 +64,18 @@ function Menu({ dark = false }) {
 
       <div
         ref={overlayRef}
-        className="fixed inset-0 z-[90] bg-gray-950 invisible flex flex-col items-center justify-center"
+        className="fixed inset-0 z-[190] bg-gray-950 invisible flex flex-col items-center justify-center"
       >
         <nav className="flex flex-col items-center gap-10">
           {NAV_LINKS.map((link, i) => (
             <a
-              key={link}
+              key={link.label}
               ref={el => { linksRef.current[i] = el }}
-              href={`/${link.toLowerCase()}`}
+              href={link.href}
               className="text-white text-5xl font-light tracking-[0.15em] uppercase hover:text-purple-400 transition-colors duration-200"
               onClick={() => setIsOpen(false)}
             >
-              {link}
+              {link.label}
             </a>
           ))}
         </nav>

@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import Menu from './components/Menu'
 import FooterHome from './components/FooterHome'
+import Intro from './components/Intro'
 import AdminLogin from './components/Admin/LoginPage'
 import Admin from './components/Admin/Admin'
  import AdminProducts from './components/Admin/AdminProducts'
@@ -23,15 +24,22 @@ import ShopSuccess from './components/ShopSuccess'
 import Volunteer from './components/Volunteer'
 import About from './components/About'
 import Contact from './components/Contact'
+import SpecialEventsSection from './components/SpecialEventsSection'
+import Room1 from './components/visits/room-1'
+import Room2 from './components/visits/room-2'
 
 
 
 
 function Home() {
   const [footerOpen, setFooterOpen] = useState(false)
+  const [introSeen, setIntroSeen] = useState(
+    () => new URLSearchParams(window.location.search).has('t')
+  )
 
   return (
     <>
+      {!introSeen && <Intro onDone={() => setIntroSeen(true)} />}
       <Menu />
       <MuseumScroll />
 
@@ -74,6 +82,9 @@ function App() {
       <Route path="/volunteer" element={<Volunteer />} />
       <Route path="/about" element={<About />} />
       <Route path="/contact" element={<Contact />} />
+      <Route path="/events" element={<SpecialEventsSection />} />
+      <Route path="/visits/room-1" element={<Room1 />} />
+      <Route path="/visits/room-2" element={<Room2 />} />
     </Routes>
   )
 }

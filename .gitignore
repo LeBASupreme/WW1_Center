@@ -1,5 +1,6 @@
 .env
 backend/uploads/
+frontend/public/videos/
 node_modules/
 frames/
 frames-clean/

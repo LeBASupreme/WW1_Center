@@ -1,13 +1,14 @@
 import API_URL from '../../config/api.js'
 import { useState, useEffect } from 'react'
 import AdminLayout from './AdminLayout'
+import DragDropImage from './DragDropImage'
 
 function AdminEvents() {
   const [events, setEvents] = useState([])
   const [loading, setLoading] = useState(true)
   const [showModal, setShowModal] = useState(false)
   const [editing, setEditing] = useState(null)
-  const [form, setForm] = useState({ title: '', description: '', event_date: '', location: '' })
+  const [form, setForm] = useState({ title: '', description: '', event_date: '', location: '', image_url: '' })
   const [saving, setSaving] = useState(false)
 
   const fetchEvents = () => {
@@ -21,7 +22,7 @@ function AdminEvents() {
 
   const openCreate = () => {
     setEditing(null)
-    setForm({ title: '', description: '', event_date: '', location: '' })
+    setForm({ title: '', description: '', event_date: '', location: '', image_url: '' })
     setShowModal(true)
   }
 
@@ -31,7 +32,8 @@ function AdminEvents() {
       title: event.title || '',
       description: event.description || '',
       event_date: event.event_date ? event.event_date.slice(0, 10) : '',
-      location: event.location || ''
+      location: event.location || '',
+      image_url: event.image_url || ''
     })
     setShowModal(true)
   }
@@ -158,6 +160,10 @@ function AdminEvents() {
                   <input type="date" value={form.event_date} onChange={e => setForm({ ...form, event_date: e.target.value })} required
                     className="w-full border border-black/10 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-black/30 transition" />
                 </div>
+              </div>
+              <div>
+                <label className="text-sm text-black/50 mb-1 block">Image</label>
+                <DragDropImage value={form.image_url} onChange={(url) => setForm({ ...form, image_url: url })} />
               </div>
               <div className="flex gap-3 mt-2">
                 <button type="button" onClick={() => setShowModal(false)} className="flex-1 py-2.5 rounded-xl border border-black/10 text-sm font-medium hover:bg-black/5 transition">Cancel</button>

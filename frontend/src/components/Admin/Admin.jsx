@@ -79,7 +79,6 @@ function Admin() {
                     <tr className="border-b border-black/5">
                       <th className="text-left text-xs font-medium text-black/40 uppercase px-6 py-4">Customer</th>
                       <th className="text-left text-xs font-medium text-black/40 uppercase px-6 py-4">Product</th>
-                      <th className="text-left text-xs font-medium text-black/40 uppercase px-6 py-4">Address</th>
                       <th className="text-left text-xs font-medium text-black/40 uppercase px-6 py-4">Total</th>
                       <th className="text-left text-xs font-medium text-black/40 uppercase px-6 py-4">Status</th>
                       <th className="text-left text-xs font-medium text-black/40 uppercase px-6 py-4">Date</th>
@@ -93,7 +92,6 @@ function Admin() {
                           <p className="text-xs text-black/40">{order.customer_email}</p>
                         </td>
                         <td className="px-6 py-4 text-sm text-black/60">{order.product_name || '—'}</td>
-                        <td className="px-6 py-4 text-sm text-black/60 max-w-xs truncate">{order.customer_address || '—'}</td>
                         <td className="px-6 py-4 text-sm font-bold text-black">£{parseFloat(order.total).toFixed(2)}</td>
                         <td className="px-6 py-4">
                           <span className={`text-xs font-medium px-3 py-1 rounded-full ${statusColor(order.status)}`}>

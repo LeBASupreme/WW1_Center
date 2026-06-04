@@ -3,7 +3,6 @@ import { existsSync, mkdirSync, readdirSync, statSync, unlinkSync } from 'fs'
 import { extname, basename } from 'path'
 import { parseArgs } from 'util'
 
-// ─── CLI args ────────────────────────────────────────────────────────────────
 const { values } = parseArgs({
   options: {
     input:       { type: 'string',  short: 'i' },

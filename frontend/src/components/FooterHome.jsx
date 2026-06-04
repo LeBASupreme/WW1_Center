@@ -9,9 +9,6 @@ const infoLinks = [
   { label: 'Help & Volunteer', href: '/volunteer' },
   { label: 'Donations',        href: '/donate' },
   { label: 'Gift Shop',        href: '/shop' },
-  { label: 'Artefacts Wanted', href: '#' },
-  { label: 'Privacy Policy',   href: '#' },
-  { label: 'Legal Notice',     href: '#' },
 ]
 
 function FooterHome({ isOpen, setIsOpen }) {
@@ -40,7 +37,7 @@ function FooterHome({ isOpen, setIsOpen }) {
   return (
     <div
       ref={overlayRef}
-      className="invisible fixed inset-0 z-[110] bg-white"
+      className="invisible fixed inset-0 z-[210] bg-white"
       style={{ display: 'grid', gridTemplateRows: 'auto 1fr auto auto' }}
     >
       {/* Ellipse background */}

@@ -1,6 +1,7 @@
 import API_URL from '../../config/api.js'
 import { useState, useEffect } from 'react'
 import AdminLayout from './AdminLayout'
+import DragDropImage from './DragDropImage'
 
 function AdminProducts() {
   const [products, setProducts] = useState([])
@@ -91,8 +92,17 @@ function AdminProducts() {
               {products.map((p) => (
                 <tr key={p.id} className="border-b border-black/5 last:border-0 hover:bg-black/[0.02] transition">
                   <td className="px-6 py-4">
-                    <p className="font-medium text-sm text-black">{p.name}</p>
-                    {p.description && <p className="text-xs text-black/40 mt-0.5 truncate max-w-xs">{p.description}</p>}
+                    <div className="flex items-center gap-3">
+                      {p.image_url ? (
+                        <img src={p.image_url} alt={p.name} className="w-10 h-10 rounded-lg object-cover shrink-0" />
+                      ) : (
+                        <div className="w-10 h-10 rounded-lg bg-black/5 shrink-0" />
+                      )}
+                      <div>
+                        <p className="font-medium text-sm text-black">{p.name}</p>
+                        {p.description && <p className="text-xs text-black/40 mt-0.5 truncate max-w-xs">{p.description}</p>}
+                      </div>
+                    </div>
                   </td>
                   <td className="px-6 py-4 text-sm font-medium text-black">£{parseFloat(p.price).toFixed(2)}</td>
                   <td className="px-6 py-4 text-sm text-black/60">{p.stock}</td>
@@ -150,9 +160,8 @@ function AdminProducts() {
                 </div>
               </div>
               <div>
-                <label className="text-sm text-black/50 mb-1 block">Image URL</label>
-                <input type="text" value={form.image_url} onChange={e => setForm({ ...form, image_url: e.target.value })}
-                  className="w-full border border-black/10 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-black/30 transition" placeholder="/images/product.jpg" />
+                <label className="text-sm text-black/50 mb-1 block">Image</label>
+                <DragDropImage value={form.image_url} onChange={url => setForm({ ...form, image_url: url })} />
               </div>
               <div className="flex gap-3 mt-2">
                 <button type="button" onClick={() => setShowModal(false)} className="flex-1 py-2.5 rounded-xl border border-black/10 text-sm font-medium hover:bg-black/5 transition">Cancel</button>

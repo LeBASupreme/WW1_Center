@@ -1,6 +1,9 @@
 import { Router } from 'express';
 import multer from 'multer';
+import { requireAuth, requireSuperAdmin } from '../middlewares/auth.middleware.js';
+
 import path from 'path';
+
 import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -9,12 +12,10 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const storage = multer.diskStorage({
   destination: path.join(__dirname, '../../uploads'), // dossier de destination
   filename: (req, file, cb) => {
-    // nom unique : timestamp + nom original pour éviter les collisions
     cb(null, `${Date.now()}-${file.originalname}`)
   }
 })
 
-// filtre : on accepte seulement les images
 const upload = multer({
   storage,
   fileFilter: (req, file, cb) => {
@@ -25,8 +26,7 @@ const upload = multer({
 
 const router = Router()
 
-// POST /api/upload — reçoit le fichier, retourne l'URL publique
-router.post('/', upload.single('image'), (req, res) => {
+router.post('/', requireAuth, requireSuperAdmin, upload.single('image'), (req, res) => {
   if (!req.file) return res.status(400).json({ error: 'No file uploaded' })
   res.json({ url: `/uploads/${req.file.filename}` })
 })

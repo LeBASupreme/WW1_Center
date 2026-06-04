@@ -3,15 +3,17 @@ import dotenv from 'dotenv';
 
 dotenv.config({ path: '../.env' });
 
-const { Pool } = pg;
-
-const pool = new pg.Pool({
-  host: process.env.DB_HOST,
-  port: process.env.DB_PORT || 5432,
-  user: process.env.DB_USER || 'ww1user',
-  password: process.env.DB_PASSWORD || 'ww1pass', 
-  database: process.env.DB_DATABASE || 'ww1db',
-});
+const pool = new pg.Pool(
+  process.env.DATABASE_URL
+    ? { connectionString: process.env.DATABASE_URL, ssl: { rejectUnauthorized: false } }
+    : {
+        host: process.env.DB_HOST,
+        port: process.env.DB_PORT || 5432,
+        user: process.env.DB_USER || 'ww1user',
+        password: process.env.DB_PASSWORD || 'ww1pass',
+        database: process.env.DB_DATABASE || 'ww1db',
+      }
+);
 
 
 pool.connect((err, client, release) => {
